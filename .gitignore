@@ -29,5 +29,5 @@ Thumbs.db
 
 # Personal files
 简历.docx
-/docs*
+docs/*
 memory_pool_demo.exe
