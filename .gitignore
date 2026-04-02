@@ -30,3 +30,6 @@ Thumbs.db
 # Personal files
 简历.docx
 /docs
+memory_pool_demo.exe
+Makefile
+CMakeLists.txt
