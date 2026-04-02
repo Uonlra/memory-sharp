@@ -3,28 +3,35 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 
 namespace {
 
+std::string FormatMs(double value) {
+  std::ostringstream out;
+  out << std::fixed << std::setprecision(3) << value;
+  return out.str();
+}
+
 std::vector<hpmem::BenchmarkCase> BuildBenchmarkCases() {
-  const std::vector<std::size_t> thread_counts = {1, 2, 3, 4, 5, 6, 7, 8};
+  const std::vector<std::size_t> thread_counts = {1, 2, 4, 8, 12, 16, 20, 24};
   const std::vector<std::size_t> alloc_sizes = {
-      8,  16,  24,  32,  48,  64,  96,
-      128, 192, 256, 384, 512, 768, 1024};
+      8,   16,  24,  32,  48,  64,  96,  128,
+      160, 192, 256, 384, 512, 640, 768, 1024};
 
   std::vector<hpmem::BenchmarkCase> cases;
   cases.reserve(thread_counts.size() * alloc_sizes.size());
 
   for (std::size_t threads : thread_counts) {
     for (std::size_t size : alloc_sizes) {
-      std::size_t iterations = 40000;
+      std::size_t iterations = 30000;
       if (size > 128) {
-        iterations = 30000;
+        iterations = 22000;
       }
       if (size > 512) {
-        iterations = 20000;
+        iterations = 16000;
       }
       cases.push_back({threads, iterations, size});
     }
@@ -76,8 +83,8 @@ void DemoBenchmark(const std::string& report_path) {
     if (i < 8 || i + 8 >= report.comparisons.size()) {
       std::cout << '[' << item.config.thread_count << " threads, "
                 << item.config.alloc_size << " bytes] ";
-      std::cout << item.baseline.name << ": " << item.baseline.elapsed.count() << " ms, ";
-      std::cout << item.optimized.name << ": " << item.optimized.elapsed.count() << " ms, ";
+      std::cout << item.baseline.name << ": " << FormatMs(item.baseline.elapsed_ms) << " ms, ";
+      std::cout << item.optimized.name << ": " << FormatMs(item.optimized.elapsed_ms) << " ms, ";
       std::cout << "speedup: " << std::fixed << std::setprecision(2) << item.speedup << "x\n";
     } else if (i == 8) {
       std::cout << "... " << (report.comparisons.size() - 16)

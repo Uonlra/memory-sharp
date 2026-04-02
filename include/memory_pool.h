@@ -127,7 +127,7 @@ struct BenchmarkResult {
   std::size_t thread_count = 0;
   std::size_t iterations = 0;
   std::size_t alloc_size = 0;
-  std::chrono::milliseconds elapsed{0};
+  double elapsed_ms = 0.0;
 };
 
 struct BenchmarkCase {

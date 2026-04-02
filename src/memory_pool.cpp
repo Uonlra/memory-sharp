@@ -6,6 +6,14 @@
 
 namespace hpmem {
 
+namespace {
+
+double ToMilliseconds(std::chrono::steady_clock::duration duration) {
+  return std::chrono::duration<double, std::milli>(duration).count();
+}
+
+}  // namespace
+
 std::size_t SizeClass::RoundUp(std::size_t bytes) {
   if (bytes == 0) {
     return kAlign;
@@ -356,7 +364,7 @@ BenchmarkResult RunNewDeleteBenchmark(std::size_t thread_count,
           thread_count,
           iterations,
           alloc_size,
-          std::chrono::duration_cast<std::chrono::milliseconds>(end - start)};
+          ToMilliseconds(end - start)};
 }
 
 BenchmarkResult RunMemoryPoolBenchmark(std::size_t thread_count,
@@ -395,7 +403,7 @@ BenchmarkResult RunMemoryPoolBenchmark(std::size_t thread_count,
           thread_count,
           iterations,
           alloc_size,
-          std::chrono::duration_cast<std::chrono::milliseconds>(end - start)};
+          ToMilliseconds(end - start)};
 }
 
 BenchmarkReport RunBenchmarkSuite(const std::vector<BenchmarkCase>& cases) {
@@ -410,10 +418,8 @@ BenchmarkReport RunBenchmarkSuite(const std::vector<BenchmarkCase>& cases) {
     comparison.optimized =
         RunMemoryPoolBenchmark(config.thread_count, config.iterations, config.alloc_size);
 
-    if (comparison.optimized.elapsed.count() > 0) {
-      comparison.speedup =
-          static_cast<double>(comparison.baseline.elapsed.count()) /
-          static_cast<double>(comparison.optimized.elapsed.count());
+    if (comparison.optimized.elapsed_ms > 0.0) {
+      comparison.speedup = comparison.baseline.elapsed_ms / comparison.optimized.elapsed_ms;
     }
     report.comparisons.push_back(comparison);
   }
@@ -432,8 +438,10 @@ void WriteBenchmarkReportJson(const BenchmarkReport& report, std::ostream& out) 
     out << "      \"threads\": " << item.config.thread_count << ",\n";
     out << "      \"iterations\": " << item.config.iterations << ",\n";
     out << "      \"allocSize\": " << item.config.alloc_size << ",\n";
-    out << "      \"baselineMs\": " << item.baseline.elapsed.count() << ",\n";
-    out << "      \"poolMs\": " << item.optimized.elapsed.count() << ",\n";
+    out << "      \"baselineMs\": " << std::fixed << std::setprecision(3)
+        << item.baseline.elapsed_ms << ",\n";
+    out << "      \"poolMs\": " << std::fixed << std::setprecision(3)
+        << item.optimized.elapsed_ms << ",\n";
     out << "      \"speedup\": " << std::fixed << std::setprecision(2) << item.speedup << "\n";
     out << "    }";
     if (i + 1 != report.comparisons.size()) {
