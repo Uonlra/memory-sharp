@@ -1,10 +1,37 @@
 #include "memory_pool.h"
 
+#include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <string>
 #include <vector>
 
 namespace {
+
+std::vector<hpmem::BenchmarkCase> BuildBenchmarkCases() {
+  const std::vector<std::size_t> thread_counts = {1, 2, 3, 4, 5, 6, 7, 8};
+  const std::vector<std::size_t> alloc_sizes = {
+      8,  16,  24,  32,  48,  64,  96,
+      128, 192, 256, 384, 512, 768, 1024};
+
+  std::vector<hpmem::BenchmarkCase> cases;
+  cases.reserve(thread_counts.size() * alloc_sizes.size());
+
+  for (std::size_t threads : thread_counts) {
+    for (std::size_t size : alloc_sizes) {
+      std::size_t iterations = 40000;
+      if (size > 128) {
+        iterations = 30000;
+      }
+      if (size > 512) {
+        iterations = 20000;
+      }
+      cases.push_back({threads, iterations, size});
+    }
+  }
+
+  return cases;
+}
 
 void DemoBasicUsage() {
   std::cout << "== Basic Demo ==\n";
@@ -22,28 +49,81 @@ void DemoBasicUsage() {
   std::cout << "all objects returned to pool\n\n";
 }
 
-void DemoBenchmark() {
+void PrintSummaryMetrics(const hpmem::BenchmarkReport& report) {
+  double best_speedup = 0.0;
+  double avg_speedup = 0.0;
+  for (const auto& item : report.comparisons) {
+    best_speedup = std::max(best_speedup, item.speedup);
+    avg_speedup += item.speedup;
+  }
+  if (!report.comparisons.empty()) {
+    avg_speedup /= static_cast<double>(report.comparisons.size());
+  }
+
+  std::cout << "\n== Summary ==\n";
+  std::cout << "cases: " << report.comparisons.size() << '\n';
+  std::cout << "best speedup: " << std::fixed << std::setprecision(2) << best_speedup << "x\n";
+  std::cout << "avg speedup : " << std::fixed << std::setprecision(2) << avg_speedup << "x\n";
+}
+
+void DemoBenchmark(const std::string& report_path) {
   std::cout << "== Benchmark ==\n";
-  constexpr std::size_t kThreads = 4;
-  constexpr std::size_t kIterations = 200000;
-  constexpr std::size_t kAllocSize = 64;
+  const std::vector<hpmem::BenchmarkCase> cases = BuildBenchmarkCases();
 
-  auto baseline = hpmem::RunNewDeleteBenchmark(kThreads, kIterations, kAllocSize);
-  auto pool = hpmem::RunMemoryPoolBenchmark(kThreads, kIterations, kAllocSize);
+  const auto report = hpmem::RunBenchmarkSuite(cases);
+  for (std::size_t i = 0; i < report.comparisons.size(); ++i) {
+    const auto& item = report.comparisons[i];
+    if (i < 8 || i + 8 >= report.comparisons.size()) {
+      std::cout << '[' << item.config.thread_count << " threads, "
+                << item.config.alloc_size << " bytes] ";
+      std::cout << item.baseline.name << ": " << item.baseline.elapsed.count() << " ms, ";
+      std::cout << item.optimized.name << ": " << item.optimized.elapsed.count() << " ms, ";
+      std::cout << "speedup: " << std::fixed << std::setprecision(2) << item.speedup << "x\n";
+    } else if (i == 8) {
+      std::cout << "... " << (report.comparisons.size() - 16)
+                << " more cases omitted from console output ...\n";
+    }
+  }
 
-  std::cout << baseline.name << ": " << baseline.elapsed.count() << " ms\n";
-  std::cout << pool.name << ": " << pool.elapsed.count() << " ms\n";
-  if (pool.elapsed.count() > 0) {
-    const double speedup =
-        static_cast<double>(baseline.elapsed.count()) / static_cast<double>(pool.elapsed.count());
-    std::cout << "speedup: " << std::fixed << std::setprecision(2) << speedup << "x\n";
+  PrintSummaryMetrics(report);
+
+  if (!report_path.empty()) {
+    std::ofstream out(report_path, std::ios::trunc);
+    if (out.is_open()) {
+      hpmem::WriteBenchmarkReportJson(report, out);
+      std::cout << "\nreport written to: " << report_path << '\n';
+
+      const std::size_t ext_pos = report_path.rfind(".json");
+      if (ext_pos != std::string::npos) {
+        const std::string js_path = report_path.substr(0, ext_pos) + ".js";
+        std::ofstream js_out(js_path, std::ios::trunc);
+        if (js_out.is_open()) {
+          js_out << "window.BENCHMARK_REPORT = ";
+          hpmem::WriteBenchmarkReportJson(report, js_out);
+          js_out << ";\n";
+          std::cout << "report mirror written to: " << js_path << '\n';
+        }
+      }
+    } else {
+      std::cout << "\nfailed to write report: " << report_path << '\n';
+    }
   }
 }
 
 }  // namespace
 
-int main() {
+int main(int argc, char* argv[]) {
+  std::string report_path = "ui/data/benchmark_report.json";
+  for (int i = 1; i < argc; ++i) {
+    std::string arg = argv[i];
+    if (arg == "--no-report") {
+      report_path.clear();
+    } else if (arg.rfind("--report=", 0) == 0) {
+      report_path = arg.substr(9);
+    }
+  }
+
   DemoBasicUsage();
-  DemoBenchmark();
+  DemoBenchmark(report_path);
   return 0;
 }

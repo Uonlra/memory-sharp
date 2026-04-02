@@ -5,9 +5,9 @@
 #include <cstddef>
 #include <cstdint>
 #include <mutex>
+#include <ostream>
 #include <string>
 #include <thread>
-#include <unordered_map>
 #include <vector>
 
 namespace hpmem {
@@ -126,7 +126,25 @@ struct BenchmarkResult {
   std::string name;
   std::size_t thread_count = 0;
   std::size_t iterations = 0;
+  std::size_t alloc_size = 0;
   std::chrono::milliseconds elapsed{0};
+};
+
+struct BenchmarkCase {
+  std::size_t thread_count = 0;
+  std::size_t iterations = 0;
+  std::size_t alloc_size = 0;
+};
+
+struct BenchmarkComparison {
+  BenchmarkCase config;
+  BenchmarkResult baseline;
+  BenchmarkResult optimized;
+  double speedup = 0.0;
+};
+
+struct BenchmarkReport {
+  std::vector<BenchmarkComparison> comparisons;
 };
 
 BenchmarkResult RunNewDeleteBenchmark(std::size_t thread_count,
@@ -136,5 +154,8 @@ BenchmarkResult RunNewDeleteBenchmark(std::size_t thread_count,
 BenchmarkResult RunMemoryPoolBenchmark(std::size_t thread_count,
                                        std::size_t iterations,
                                        std::size_t alloc_size);
+
+BenchmarkReport RunBenchmarkSuite(const std::vector<BenchmarkCase>& cases);
+void WriteBenchmarkReportJson(const BenchmarkReport& report, std::ostream& out);
 
 }  // namespace hpmem

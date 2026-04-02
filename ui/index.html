@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>高性能内存池项目展示</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Project Showcase</p>
+          <h1>高性能内存池设计与实现</h1>
+          <p class="hero-text">
+            面向高频小对象分配场景，基于 C++ 实现分层内存池，通过
+            <strong>ThreadCache / CentralCache / PageCache / Span</strong>
+            减少系统调用开销与多线程锁竞争。
+          </p>
+          <div class="hero-tags">
+            <span>C++17</span>
+            <span>并发优化</span>
+            <span>内存管理</span>
+            <span>可视化展示</span>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <div class="metric-card">
+            <p>最佳加速比</p>
+            <h2 id="best-speedup">--</h2>
+          </div>
+          <div class="metric-card">
+            <p>平均加速比</p>
+            <h2 id="avg-speedup">--</h2>
+          </div>
+          <div class="metric-card">
+            <p>测试场景数</p>
+            <h2 id="case-count">--</h2>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="section-grid">
+          <article class="card">
+            <p class="section-kicker">项目作用</p>
+            <h3>项目目标?</h3>
+            <ul class="clean-list">
+              <li>解决高频小对象分配下 `new/delete` 开销大、锁竞争明显的问题。</li>
+              <li>体现对操作系统内存管理、缓存分层和并发优化的理解。</li>
+              <li>既能落到代码实现，也能直观展示性能优化带来的工程价值。</li>
+            </ul>
+          </article>
+
+          <article class="card accent-card">
+            <p class="section-kicker">项目成果</p>
+            <h3>项目重点</h3>
+            <div class="result-pills">
+              <span>多场景 benchmark</span>
+              <span>本地可运行演示程序</span>
+              <span>可视化展示界面</span>
+              <span>性能对比报告输出</span>
+            </div>
+            <p class="card-note">
+              页面数据来自项目运行后生成的 `benchmark_report.json`，不是静态写死。
+            </p>
+          </article>
+        </section>
+
+        <section class="card architecture-card">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">架构设计</p>
+              <h3>分层路径与职责</h3>
+            </div>
+            <p class="section-desc">
+              小对象优先命中线程私有缓存，缓存不足时向共享中心缓存批量申请，再由页缓存按 Span 提供连续内存。
+            </p>
+          </div>
+
+          <div class="architecture-flow">
+            <div class="flow-node warm">
+              <span class="node-index">01</span>
+              <h4>ThreadCache</h4>
+              <p>线程本地自由链表，优先命中，减少共享锁竞争。</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">
+              <span class="node-index">02</span>
+              <h4>CentralCache</h4>
+              <p>批量供给与回收对象，平衡线程局部性和全局复用。</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node cool">
+              <span class="node-index">03</span>
+              <h4>PageCache / Span</h4>
+              <p>按页组织连续内存，切分对象并管理回收边界。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-grid">
+          <article class="card">
+            <p class="section-kicker">图例对比</p>
+            <h3>默认分配器 vs 内存池</h3>
+            <div class="legend-list">
+              <div class="legend-item">
+                <span class="swatch baseline"></span>
+                <div>
+                  <strong>默认 `new/delete`</strong>
+                  <p>每次分配都更频繁地触达通用分配路径，多线程下容易出现锁竞争。</p>
+                </div>
+              </div>
+              <div class="legend-item">
+                <span class="swatch optimized"></span>
+                <div>
+                  <strong>Memory Pool</strong>
+                  <p>优先复用线程本地空闲对象，批量搬运降低共享访问成本。</p>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <p class="section-kicker">项目优势</p>
+            <h3>项目亮点</h3>
+            <ul class="clean-list">
+              <li>有清晰的分层设计，不只是简单 free list。</li>
+              <li>有性能对比，有数据支撑，不是纯概念项目。</li>
+              <li>能继续扩展到页号映射、Span 合并拆分等工业级能力。</li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">性能对比</p>
+              <h3>Benchmark Dashboard</h3>
+            </div>
+            <p class="section-desc">
+              横向对比不同线程数和对象大小下，原生分配器与内存池的耗时差异。
+            </p>
+          </div>
+          <div class="overview-strip">
+            <div class="overview-badge">
+              <strong id="scenario-count">--</strong>
+              <span>测试场景</span>
+            </div>
+            <div class="overview-badge">
+              <strong id="top-case">--</strong>
+              <span>最佳场景</span>
+            </div>
+          </div>
+          <div class="origin-panel">
+            <div class="origin-head">
+              <div>
+                <p class="section-kicker">Origin 风格线图</p>
+                <h3>趋势线说明</h3>
+              </div>
+              <p class="section-desc">
+                柱状图用于突出局部最优场景，线型图用于观察整体趋势。这里用两张 Origin 风格折线图分别展示线程扩展下的平均耗时变化，以及对象大小变化下的平均加速比走势。
+              </p>
+            </div>
+            <div class="origin-legend">
+              <div class="origin-legend-item">
+                <span class="legend-line baseline"></span>
+                <span>默认 `new/delete` 平均耗时</span>
+              </div>
+              <div class="origin-legend-item">
+                <span class="legend-line optimized"></span>
+                <span>Memory Pool 平均耗时</span>
+              </div>
+              <div class="origin-legend-item">
+                <span class="legend-line speedup"></span>
+                <span>平均加速比趋势</span>
+              </div>
+            </div>
+            <div class="origin-grid">
+              <div class="origin-chart-card">
+                <h4>平均耗时 vs 线程数</h4>
+                <div id="thread-line-chart" class="origin-chart"></div>
+              </div>
+              <div class="origin-chart-card">
+                <h4>平均加速比 vs 对象大小</h4>
+                <div id="size-line-chart" class="origin-chart"></div>
+              </div>
+            </div>
+          </div>
+          <details class="table-details">
+            <summary>
+              <span>前12组最佳测试数据（点击查看具体测试数据）</span>
+              <span class="summary-meta"><b>点击展开 / 折叠</b></span>
+            </summary>
+            
+            <div class="table-shell">
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>线程数</th>
+                    <th>对象大小</th>
+                    <th>迭代次数</th>
+                    <th>new/delete</th>
+                    <th>memory pool</th>
+                    <th>加速比</th>
+                  </tr>
+                </thead>
+                <tbody id="comparison-body"></tbody>
+              </table>
+            </div>
+          </details>
+          <div id="chart-area" class="chart-area"></div>
+        </section>
+
+        <section class="section-grid">
+          <article class="card">
+            <p class="section-kicker">完成的工作</p>
+            <h3>工程升级内容</h3>
+            <ul class="clean-list">
+              <li>扩展 benchmark 为多场景测试并自动输出 JSON 报告。</li>
+              <li>新增可视化页面，展示成果、架构、作用和性能优势。</li>
+              <li>补齐图例说明，让观众一眼看出这个项目的优化价值。</li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="./data/benchmark_report.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

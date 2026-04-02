@@ -1,6 +1,7 @@
 #include "memory_pool.h"
 
 #include <algorithm>
+#include <iomanip>
 #include <new>
 
 namespace hpmem {
@@ -290,11 +291,12 @@ void* MemoryPool::Allocate(std::size_t bytes) {
   if (bytes == 0) {
     bytes = 1;
   }
-  if (bytes > SizeClass::kMaxBytes) {
+  const std::size_t actual_bytes = bytes + sizeof(ObjectHeader);
+  if (actual_bytes > SizeClass::kMaxBytes) {
     Span* span = PageCache::Instance().NewLargeSpan(bytes);
     return static_cast<char*>(span->memory) + sizeof(ObjectHeader);
   }
-  return LocalCache().Allocate(bytes + sizeof(ObjectHeader));
+  return LocalCache().Allocate(actual_bytes);
 }
 
 void MemoryPool::Deallocate(void* ptr, std::size_t bytes) {
@@ -350,7 +352,11 @@ BenchmarkResult RunNewDeleteBenchmark(std::size_t thread_count,
   }
 
   auto end = std::chrono::steady_clock::now();
-  return {"new/delete", thread_count, iterations, std::chrono::duration_cast<std::chrono::milliseconds>(end - start)};
+  return {"new/delete",
+          thread_count,
+          iterations,
+          alloc_size,
+          std::chrono::duration_cast<std::chrono::milliseconds>(end - start)};
 }
 
 BenchmarkResult RunMemoryPoolBenchmark(std::size_t thread_count,
@@ -385,7 +391,59 @@ BenchmarkResult RunMemoryPoolBenchmark(std::size_t thread_count,
   }
 
   auto end = std::chrono::steady_clock::now();
-  return {"memory pool", thread_count, iterations, std::chrono::duration_cast<std::chrono::milliseconds>(end - start)};
+  return {"memory pool",
+          thread_count,
+          iterations,
+          alloc_size,
+          std::chrono::duration_cast<std::chrono::milliseconds>(end - start)};
+}
+
+BenchmarkReport RunBenchmarkSuite(const std::vector<BenchmarkCase>& cases) {
+  BenchmarkReport report;
+  report.comparisons.reserve(cases.size());
+
+  for (const auto& config : cases) {
+    BenchmarkComparison comparison;
+    comparison.config = config;
+    comparison.baseline =
+        RunNewDeleteBenchmark(config.thread_count, config.iterations, config.alloc_size);
+    comparison.optimized =
+        RunMemoryPoolBenchmark(config.thread_count, config.iterations, config.alloc_size);
+
+    if (comparison.optimized.elapsed.count() > 0) {
+      comparison.speedup =
+          static_cast<double>(comparison.baseline.elapsed.count()) /
+          static_cast<double>(comparison.optimized.elapsed.count());
+    }
+    report.comparisons.push_back(comparison);
+  }
+
+  return report;
+}
+
+void WriteBenchmarkReportJson(const BenchmarkReport& report, std::ostream& out) {
+  out << "{\n";
+  out << "  \"project\": \"High Performance Memory Pool\",\n";
+  out << "  \"comparisons\": [\n";
+
+  for (std::size_t i = 0; i < report.comparisons.size(); ++i) {
+    const auto& item = report.comparisons[i];
+    out << "    {\n";
+    out << "      \"threads\": " << item.config.thread_count << ",\n";
+    out << "      \"iterations\": " << item.config.iterations << ",\n";
+    out << "      \"allocSize\": " << item.config.alloc_size << ",\n";
+    out << "      \"baselineMs\": " << item.baseline.elapsed.count() << ",\n";
+    out << "      \"poolMs\": " << item.optimized.elapsed.count() << ",\n";
+    out << "      \"speedup\": " << std::fixed << std::setprecision(2) << item.speedup << "\n";
+    out << "    }";
+    if (i + 1 != report.comparisons.size()) {
+      out << ",";
+    }
+    out << "\n";
+  }
+
+  out << "  ]\n";
+  out << "}\n";
 }
 
 }  // namespace hpmem
