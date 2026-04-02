@@ -17,6 +17,10 @@ function formatSpeedup(value) {
   return `${value.toFixed(2)}x`;
 }
 
+function formatMs(value) {
+  return `${Number(value).toFixed(3)} ms`;
+}
+
 function renderSummary(report) {
   const comparisons = report.comparisons || [];
   const best = comparisons.reduce((max, item) => Math.max(max, item.speedup), 0);
@@ -54,7 +58,7 @@ function createBar(label, value, maxValue, type) {
 
   const valueEl = document.createElement("div");
   valueEl.className = "bar-value";
-  valueEl.textContent = `${value} ms`;
+  valueEl.textContent = formatMs(value);
 
   row.append(labelEl, track, valueEl);
   return row;
@@ -362,8 +366,8 @@ function renderTable(report) {
       <td>${item.threads}</td>
       <td>${item.allocSize} B</td>
       <td>${item.iterations.toLocaleString()}</td>
-      <td>${item.baselineMs} ms</td>
-      <td>${item.poolMs} ms</td>
+      <td>${Number(item.baselineMs).toFixed(3)} ms</td>
+      <td>${Number(item.poolMs).toFixed(3)} ms</td>
       <td>${formatSpeedup(item.speedup)}</td>
     `;
     body.appendChild(tr);

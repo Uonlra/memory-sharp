@@ -10,14 +10,12 @@
     <div class="page-shell">
       <header class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">项目简介</p>
+          <p class="eyebrow">Project Showcase</p>
           <h1>高性能内存池设计与实现</h1>
           <p class="hero-text">
             面向高频小对象分配场景，基于 C++ 实现分层内存池，通过
             <strong>ThreadCache / CentralCache / PageCache / Span</strong>
             减少系统调用开销与多线程锁竞争。
-            <p class="eyebrow">项目地址：<a href="https://github.com/Uonlra/memory-sharp" target="_blank" class="card-note">https://github.com/Uonlra/memory-sharp</a></p>
-            
           </p>
           <div class="hero-tags">
             <span>C++17</span>
@@ -46,7 +44,7 @@
         <section class="section-grid">
           <article class="card">
             <p class="section-kicker">项目作用</p>
-            <h3>项目目标</h3>
+            <h3>项目目标?</h3>
             <ul class="clean-list">
               <li>解决高频小对象分配下 `new/delete` 开销大、锁竞争明显的问题。</li>
               <li>体现对操作系统内存管理、缓存分层和并发优化的理解。</li>
@@ -58,13 +56,13 @@
             <p class="section-kicker">项目成果</p>
             <h3>项目重点</h3>
             <div class="result-pills">
-              <span>多场景 benchmark</span>
+              <span>128 组 benchmark</span>
               <span>本地可运行演示程序</span>
               <span>可视化展示界面</span>
               <span>性能对比报告输出</span>
             </div>
             <p class="card-note">
-              页面数据来自项目运行后生成的 `benchmark_report.json`，不是静态写死。
+              页面数据来自项目运行后生成的 `benchmark_report.json`。当前测试固定为 8 档线程数和 16 档对象大小，共 128 组代表性场景。
             </p>
           </article>
         </section>
@@ -157,11 +155,11 @@
           <div class="origin-panel">
             <div class="origin-head">
               <div>
-                <p class="section-kicker">Origin 风格线图</p>
+              <p class="section-kicker">Origin 风格线图</p>
                 <h3>趋势线说明</h3>
               </div>
               <p class="section-desc">
-                柱状图用于突出局部最优场景，线型图用于观察整体趋势。这里用两张 Origin 风格折线图分别展示线程扩展下的平均耗时变化，以及对象大小变化下的平均加速比走势。
+                柱状图用于突出局部最优场景，线型图用于观察整体趋势。左图展示不同线程数下默认分配器与内存池的平均耗时变化，右图展示不同对象大小下的平均加速比变化。线型图更适合说明趋势、拐点和稳定性，而不是单个样本的局部波动。
               </p>
             </div>
             <div class="origin-legend">
@@ -214,6 +212,17 @@
           <div id="chart-area" class="chart-area"></div>
         </section>
 
+        <section class="section-grid">
+          <article class="card">
+            <p class="section-kicker">完成的工作</p>
+            <h3>工程升级内容</h3>
+            <ul class="clean-list">
+              <li>将 benchmark 收敛为 128 组代表性测试场景并自动输出 JSON 报告。</li>
+              <li>新增可视化页面，展示成果、架构、作用和性能优势。</li>
+              <li>补齐图例与线型图说明，让趋势分析更直观。</li>
+            </ul>
+          </article>
+        </section>
       </main>
     </div>
 
