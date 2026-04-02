@@ -23,10 +23,14 @@
 
 ## 如何构建
 
+### 构建数据集
+```
+g++ -std=c++17 -O2 -Wall -Wextra -pthread -Iinclude -o memory_pool_demo src/main.cpp src/memory_pool.cpp
+.\memory_pool_demo.exe
+```
 ### 方式一：直接使用 Makefile
 
-```powershell
-make
+```powershell（推荐）
 .\memory_pool_demo.exe
 ```
 
@@ -49,6 +53,9 @@ cmake --build build
 然后打开下面这个页面即可查看可视化展示：
 
 `ui/index.html`
+
+## 项目托管示例
+
 
 页面会突出展示：
 

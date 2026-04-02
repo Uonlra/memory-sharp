@@ -5,9 +5,9 @@ window.BENCHMARK_REPORT = {
       "threads": 1,
       "iterations": 40000,
       "allocSize": 8,
-      "baselineMs": 1,
+      "baselineMs": 2,
       "poolMs": 1,
-      "speedup": 1.00
+      "speedup": 2.00
     },
     {
       "threads": 1,
@@ -29,17 +29,17 @@ window.BENCHMARK_REPORT = {
       "threads": 1,
       "iterations": 40000,
       "allocSize": 32,
-      "baselineMs": 2,
+      "baselineMs": 1,
       "poolMs": 1,
-      "speedup": 2.00
+      "speedup": 1.00
     },
     {
       "threads": 1,
       "iterations": 40000,
       "allocSize": 48,
-      "baselineMs": 2,
+      "baselineMs": 1,
       "poolMs": 1,
-      "speedup": 2.00
+      "speedup": 1.00
     },
     {
       "threads": 1,
@@ -78,8 +78,8 @@ window.BENCHMARK_REPORT = {
       "iterations": 30000,
       "allocSize": 256,
       "baselineMs": 1,
-      "poolMs": 1,
-      "speedup": 1.00
+      "poolMs": 0,
+      "speedup": 0.00
     },
     {
       "threads": 1,
@@ -94,16 +94,16 @@ window.BENCHMARK_REPORT = {
       "iterations": 30000,
       "allocSize": 512,
       "baselineMs": 1,
-      "poolMs": 0,
-      "speedup": 0.00
+      "poolMs": 1,
+      "speedup": 1.00
     },
     {
       "threads": 1,
       "iterations": 20000,
       "allocSize": 768,
-      "baselineMs": 1,
-      "poolMs": 1,
-      "speedup": 1.00
+      "baselineMs": 0,
+      "poolMs": 0,
+      "speedup": 0.00
     },
     {
       "threads": 1,
@@ -149,9 +149,9 @@ window.BENCHMARK_REPORT = {
       "threads": 2,
       "iterations": 40000,
       "allocSize": 48,
-      "baselineMs": 3,
+      "baselineMs": 1,
       "poolMs": 1,
-      "speedup": 3.00
+      "speedup": 1.00
     },
     {
       "threads": 2,
@@ -173,33 +173,33 @@ window.BENCHMARK_REPORT = {
       "threads": 2,
       "iterations": 40000,
       "allocSize": 128,
-      "baselineMs": 3,
+      "baselineMs": 1,
       "poolMs": 1,
-      "speedup": 3.00
+      "speedup": 1.00
     },
     {
       "threads": 2,
       "iterations": 30000,
       "allocSize": 192,
-      "baselineMs": 2,
+      "baselineMs": 1,
       "poolMs": 1,
-      "speedup": 2.00
+      "speedup": 1.00
     },
     {
       "threads": 2,
       "iterations": 30000,
       "allocSize": 256,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
+      "baselineMs": 1,
+      "poolMs": 0,
+      "speedup": 0.00
     },
     {
       "threads": 2,
       "iterations": 30000,
       "allocSize": 384,
-      "baselineMs": 1,
-      "poolMs": 0,
-      "speedup": 0.00
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
     },
     {
       "threads": 2,
@@ -213,7 +213,7 @@ window.BENCHMARK_REPORT = {
       "threads": 2,
       "iterations": 20000,
       "allocSize": 768,
-      "baselineMs": 2,
+      "baselineMs": 1,
       "poolMs": 0,
       "speedup": 0.00
     },
@@ -245,9 +245,9 @@ window.BENCHMARK_REPORT = {
       "threads": 3,
       "iterations": 40000,
       "allocSize": 24,
-      "baselineMs": 3,
+      "baselineMs": 2,
       "poolMs": 1,
-      "speedup": 3.00
+      "speedup": 2.00
     },
     {
       "threads": 3,
@@ -277,9 +277,9 @@ window.BENCHMARK_REPORT = {
       "threads": 3,
       "iterations": 40000,
       "allocSize": 96,
-      "baselineMs": 3,
+      "baselineMs": 2,
       "poolMs": 1,
-      "speedup": 3.00
+      "speedup": 2.00
     },
     {
       "threads": 3,
@@ -309,17 +309,17 @@ window.BENCHMARK_REPORT = {
       "threads": 3,
       "iterations": 30000,
       "allocSize": 384,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
     },
     {
       "threads": 3,
       "iterations": 30000,
       "allocSize": 512,
       "baselineMs": 2,
-      "poolMs": 0,
-      "speedup": 0.00
+      "poolMs": 1,
+      "speedup": 2.00
     },
     {
       "threads": 3,
@@ -341,6 +341,22 @@ window.BENCHMARK_REPORT = {
       "threads": 4,
       "iterations": 40000,
       "allocSize": 8,
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
+    },
+    {
+      "threads": 4,
+      "iterations": 40000,
+      "allocSize": 16,
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
+    },
+    {
+      "threads": 4,
+      "iterations": 40000,
+      "allocSize": 24,
       "baselineMs": 2,
       "poolMs": 2,
       "speedup": 1.00
@@ -348,22 +364,6 @@ window.BENCHMARK_REPORT = {
     {
       "threads": 4,
       "iterations": 40000,
-      "allocSize": 16,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 4,
-      "iterations": 40000,
-      "allocSize": 24,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 4,
-      "iterations": 40000,
       "allocSize": 32,
       "baselineMs": 3,
       "poolMs": 1,
@@ -382,387 +382,51 @@ window.BENCHMARK_REPORT = {
       "iterations": 40000,
       "allocSize": 64,
       "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 4,
-      "iterations": 40000,
-      "allocSize": 96,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 4,
-      "iterations": 40000,
-      "allocSize": 128,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 4,
-      "iterations": 30000,
-      "allocSize": 192,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 4,
-      "iterations": 30000,
-      "allocSize": 256,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 4,
-      "iterations": 30000,
-      "allocSize": 384,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 4,
-      "iterations": 30000,
-      "allocSize": 512,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 4,
-      "iterations": 20000,
-      "allocSize": 768,
-      "baselineMs": 2,
-      "poolMs": 0,
-      "speedup": 0.00
-    },
-    {
-      "threads": 4,
-      "iterations": 20000,
-      "allocSize": 1024,
-      "baselineMs": 1,
       "poolMs": 2,
-      "speedup": 0.50
-    },
-    {
-      "threads": 5,
-      "iterations": 40000,
-      "allocSize": 8,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 5,
-      "iterations": 40000,
-      "allocSize": 16,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 5,
-      "iterations": 40000,
-      "allocSize": 24,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 5,
-      "iterations": 40000,
-      "allocSize": 32,
-      "baselineMs": 3,
-      "poolMs": 1,
-      "speedup": 3.00
-    },
-    {
-      "threads": 5,
-      "iterations": 40000,
-      "allocSize": 48,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 5,
-      "iterations": 40000,
-      "allocSize": 64,
-      "baselineMs": 3,
-      "poolMs": 1,
-      "speedup": 3.00
-    },
-    {
-      "threads": 5,
-      "iterations": 40000,
-      "allocSize": 96,
-      "baselineMs": 3,
-      "poolMs": 1,
-      "speedup": 3.00
-    },
-    {
-      "threads": 5,
-      "iterations": 40000,
-      "allocSize": 128,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 5,
-      "iterations": 30000,
-      "allocSize": 192,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 5,
-      "iterations": 30000,
-      "allocSize": 256,
-      "baselineMs": 3,
-      "poolMs": 1,
-      "speedup": 3.00
-    },
-    {
-      "threads": 5,
-      "iterations": 30000,
-      "allocSize": 384,
-      "baselineMs": 3,
-      "poolMs": 1,
-      "speedup": 3.00
-    },
-    {
-      "threads": 5,
-      "iterations": 30000,
-      "allocSize": 512,
-      "baselineMs": 3,
-      "poolMs": 1,
-      "speedup": 3.00
-    },
-    {
-      "threads": 5,
-      "iterations": 20000,
-      "allocSize": 768,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 5,
-      "iterations": 20000,
-      "allocSize": 1024,
-      "baselineMs": 2,
-      "poolMs": 3,
-      "speedup": 0.67
-    },
-    {
-      "threads": 6,
-      "iterations": 40000,
-      "allocSize": 8,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 6,
-      "iterations": 40000,
-      "allocSize": 16,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 6,
-      "iterations": 40000,
-      "allocSize": 24,
-      "baselineMs": 3,
-      "poolMs": 1,
-      "speedup": 3.00
-    },
-    {
-      "threads": 6,
-      "iterations": 40000,
-      "allocSize": 32,
-      "baselineMs": 3,
-      "poolMs": 1,
-      "speedup": 3.00
-    },
-    {
-      "threads": 6,
-      "iterations": 40000,
-      "allocSize": 48,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 6,
-      "iterations": 40000,
-      "allocSize": 64,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 6,
-      "iterations": 40000,
-      "allocSize": 96,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 6,
-      "iterations": 40000,
-      "allocSize": 128,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 6,
-      "iterations": 30000,
-      "allocSize": 192,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 6,
-      "iterations": 30000,
-      "allocSize": 256,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 6,
-      "iterations": 30000,
-      "allocSize": 384,
-      "baselineMs": 3,
-      "poolMs": 1,
-      "speedup": 3.00
-    },
-    {
-      "threads": 6,
-      "iterations": 30000,
-      "allocSize": 512,
-      "baselineMs": 3,
-      "poolMs": 1,
-      "speedup": 3.00
-    },
-    {
-      "threads": 6,
-      "iterations": 20000,
-      "allocSize": 768,
-      "baselineMs": 2,
-      "poolMs": 1,
-      "speedup": 2.00
-    },
-    {
-      "threads": 6,
-      "iterations": 20000,
-      "allocSize": 1024,
-      "baselineMs": 2,
-      "poolMs": 3,
-      "speedup": 0.67
-    },
-    {
-      "threads": 7,
-      "iterations": 40000,
-      "allocSize": 8,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 7,
-      "iterations": 40000,
-      "allocSize": 16,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 7,
-      "iterations": 40000,
-      "allocSize": 24,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 7,
-      "iterations": 40000,
-      "allocSize": 32,
-      "baselineMs": 4,
-      "poolMs": 2,
-      "speedup": 2.00
-    },
-    {
-      "threads": 7,
-      "iterations": 40000,
-      "allocSize": 48,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 7,
-      "iterations": 40000,
-      "allocSize": 64,
-      "baselineMs": 3,
-      "poolMs": 2,
-      "speedup": 1.50
-    },
-    {
-      "threads": 7,
-      "iterations": 40000,
-      "allocSize": 96,
-      "baselineMs": 4,
-      "poolMs": 4,
       "speedup": 1.00
     },
     {
-      "threads": 7,
+      "threads": 4,
       "iterations": 40000,
-      "allocSize": 128,
-      "baselineMs": 4,
-      "poolMs": 2,
-      "speedup": 2.00
-    },
-    {
-      "threads": 7,
-      "iterations": 30000,
-      "allocSize": 192,
+      "allocSize": 96,
       "baselineMs": 3,
       "poolMs": 1,
       "speedup": 3.00
     },
     {
-      "threads": 7,
-      "iterations": 30000,
-      "allocSize": 256,
-      "baselineMs": 4,
+      "threads": 4,
+      "iterations": 40000,
+      "allocSize": 128,
+      "baselineMs": 3,
       "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 4,
+      "iterations": 30000,
+      "allocSize": 192,
+      "baselineMs": 2,
+      "poolMs": 1,
       "speedup": 2.00
     },
     {
-      "threads": 7,
+      "threads": 4,
       "iterations": 30000,
-      "allocSize": 384,
-      "baselineMs": 4,
+      "allocSize": 256,
+      "baselineMs": 2,
       "poolMs": 1,
-      "speedup": 4.00
+      "speedup": 2.00
     },
     {
-      "threads": 7,
+      "threads": 4,
+      "iterations": 30000,
+      "allocSize": 384,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 4,
       "iterations": 30000,
       "allocSize": 512,
       "baselineMs": 3,
@@ -770,7 +434,7 @@ window.BENCHMARK_REPORT = {
       "speedup": 3.00
     },
     {
-      "threads": 7,
+      "threads": 4,
       "iterations": 20000,
       "allocSize": 768,
       "baselineMs": 3,
@@ -778,7 +442,7 @@ window.BENCHMARK_REPORT = {
       "speedup": 3.00
     },
     {
-      "threads": 7,
+      "threads": 4,
       "iterations": 20000,
       "allocSize": 1024,
       "baselineMs": 2,
@@ -786,6 +450,342 @@ window.BENCHMARK_REPORT = {
       "speedup": 0.50
     },
     {
+      "threads": 5,
+      "iterations": 40000,
+      "allocSize": 8,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 5,
+      "iterations": 40000,
+      "allocSize": 16,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 5,
+      "iterations": 40000,
+      "allocSize": 24,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 5,
+      "iterations": 40000,
+      "allocSize": 32,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 5,
+      "iterations": 40000,
+      "allocSize": 48,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 5,
+      "iterations": 40000,
+      "allocSize": 64,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 5,
+      "iterations": 40000,
+      "allocSize": 96,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 5,
+      "iterations": 40000,
+      "allocSize": 128,
+      "baselineMs": 2,
+      "poolMs": 2,
+      "speedup": 1.00
+    },
+    {
+      "threads": 5,
+      "iterations": 30000,
+      "allocSize": 192,
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
+    },
+    {
+      "threads": 5,
+      "iterations": 30000,
+      "allocSize": 256,
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
+    },
+    {
+      "threads": 5,
+      "iterations": 30000,
+      "allocSize": 384,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 5,
+      "iterations": 30000,
+      "allocSize": 512,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 5,
+      "iterations": 20000,
+      "allocSize": 768,
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
+    },
+    {
+      "threads": 5,
+      "iterations": 20000,
+      "allocSize": 1024,
+      "baselineMs": 1,
+      "poolMs": 3,
+      "speedup": 0.33
+    },
+    {
+      "threads": 6,
+      "iterations": 40000,
+      "allocSize": 8,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 6,
+      "iterations": 40000,
+      "allocSize": 16,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 6,
+      "iterations": 40000,
+      "allocSize": 24,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 6,
+      "iterations": 40000,
+      "allocSize": 32,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 6,
+      "iterations": 40000,
+      "allocSize": 48,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 6,
+      "iterations": 40000,
+      "allocSize": 64,
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
+    },
+    {
+      "threads": 6,
+      "iterations": 40000,
+      "allocSize": 96,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 6,
+      "iterations": 40000,
+      "allocSize": 128,
+      "baselineMs": 2,
+      "poolMs": 2,
+      "speedup": 1.00
+    },
+    {
+      "threads": 6,
+      "iterations": 30000,
+      "allocSize": 192,
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
+    },
+    {
+      "threads": 6,
+      "iterations": 30000,
+      "allocSize": 256,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 6,
+      "iterations": 30000,
+      "allocSize": 384,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 6,
+      "iterations": 30000,
+      "allocSize": 512,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 6,
+      "iterations": 20000,
+      "allocSize": 768,
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
+    },
+    {
+      "threads": 6,
+      "iterations": 20000,
+      "allocSize": 1024,
+      "baselineMs": 2,
+      "poolMs": 3,
+      "speedup": 0.67
+    },
+    {
+      "threads": 7,
+      "iterations": 40000,
+      "allocSize": 8,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 7,
+      "iterations": 40000,
+      "allocSize": 16,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 7,
+      "iterations": 40000,
+      "allocSize": 24,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 7,
+      "iterations": 40000,
+      "allocSize": 32,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 7,
+      "iterations": 40000,
+      "allocSize": 48,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 7,
+      "iterations": 40000,
+      "allocSize": 64,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 7,
+      "iterations": 40000,
+      "allocSize": 96,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 7,
+      "iterations": 40000,
+      "allocSize": 128,
+      "baselineMs": 3,
+      "poolMs": 2,
+      "speedup": 1.50
+    },
+    {
+      "threads": 7,
+      "iterations": 30000,
+      "allocSize": 192,
+      "baselineMs": 2,
+      "poolMs": 1,
+      "speedup": 2.00
+    },
+    {
+      "threads": 7,
+      "iterations": 30000,
+      "allocSize": 256,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 7,
+      "iterations": 30000,
+      "allocSize": 384,
+      "baselineMs": 4,
+      "poolMs": 2,
+      "speedup": 2.00
+    },
+    {
+      "threads": 7,
+      "iterations": 30000,
+      "allocSize": 512,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 7,
+      "iterations": 20000,
+      "allocSize": 768,
+      "baselineMs": 3,
+      "poolMs": 1,
+      "speedup": 3.00
+    },
+    {
+      "threads": 7,
+      "iterations": 20000,
+      "allocSize": 1024,
+      "baselineMs": 2,
+      "poolMs": 3,
+      "speedup": 0.67
+    },
+    {
       "threads": 8,
       "iterations": 40000,
       "allocSize": 8,
@@ -861,9 +861,9 @@ window.BENCHMARK_REPORT = {
       "threads": 8,
       "iterations": 30000,
       "allocSize": 256,
-      "baselineMs": 4,
+      "baselineMs": 3,
       "poolMs": 1,
-      "speedup": 4.00
+      "speedup": 3.00
     },
     {
       "threads": 8,
@@ -893,9 +893,9 @@ window.BENCHMARK_REPORT = {
       "threads": 8,
       "iterations": 20000,
       "allocSize": 1024,
-      "baselineMs": 3,
+      "baselineMs": 2,
       "poolMs": 4,
-      "speedup": 0.75
+      "speedup": 0.50
     }
   ]
 }
