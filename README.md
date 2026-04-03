@@ -2,7 +2,7 @@
 
 这是一个适合考研复试展示的 C++ 项目，核心目标是用分级缓存的方式减少频繁 `new/delete` 带来的系统调用开销和锁竞争。
 ## 项目示例
-https://sharpe-memory.netlify.app/
+https://memory-sharp.vercel.app/
 
 ## 项目亮点
 
