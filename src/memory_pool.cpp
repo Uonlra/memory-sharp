@@ -130,6 +130,7 @@ void PageCache::ReleaseSpan(Span* span) {
 }
 
 Span* PageCache::MapObjectToSpan(void* ptr) {
+  // 根据指针地址偏移回退找到对象头，从而定位该对象隶属的 Span 描述结构
   auto* header =
       reinterpret_cast<ObjectHeader*>(static_cast<char*>(ptr) - sizeof(ObjectHeader));
   return header->span;
@@ -142,22 +143,30 @@ CentralCache& CentralCache::Instance() {
 
 Span* CentralCache::GetOneSpan(std::size_t index, std::size_t bytes) {
   auto& spans = span_lists_[index];
+  
+  // 遍历寻找一个还有空闲对象可用的 Span
   for (Span* span : spans) {
     if (span->free_list != nullptr) {
       return span;
     }
   }
 
+  // 若当前列表中无可用 Span，向 PageCache 申请新的页
   Span* span = PageCache::Instance().NewSpan(SizeClass::NumPages(bytes));
   span->object_size = SizeClass::RoundUp(bytes);
   span->object_count = span->bytes / span->object_size;
-  span->use_count = 0;
+  span->use_count = 0; // 初始未分配过对象
 
   char* cur = static_cast<char*>(span->memory);
+  
+  // 初始化刚分配的 Span，将其按对象尺寸分割成一个个空闲块
+  // 并在每个空闲块的前端写入 ObjectHeader (指向自己这个 Span)
   auto* first_header = reinterpret_cast<ObjectHeader*>(cur);
   first_header->span = span;
   span->free_list = reinterpret_cast<FreeObject*>(cur + sizeof(ObjectHeader));
   FreeObject* tail = span->free_list;
+  
+  // 将整个 Span 切片串成自由链表
   for (std::size_t i = 1; i < span->object_count; ++i) {
     cur += span->object_size;
     auto* header = reinterpret_cast<ObjectHeader*>(cur);
@@ -178,26 +187,32 @@ Span* CentralCache::FetchRange(void*& start,
   start = nullptr;
   end = nullptr;
   const std::size_t index = SizeClass::Index(bytes);
+  
+  // 对 Central Cache 对应的特定哈希桶加锁，避免多线程并发获取同一大小发生竞争
   std::lock_guard<std::mutex> guard(mutexes_[index]);
 
+  // 从此桶中取出一个带有空闲资源的 Span
   Span* span = GetOneSpan(index, bytes);
   start = span->free_list;
   FreeObject* cur = span->free_list;
   FreeObject* prev = nullptr;
   std::size_t actual = 0;
 
+  // 根据需求取回足够数量 (batch_num) 的对象
   while (cur != nullptr && actual < batch_num) {
     prev = cur;
     cur = cur->next;
     ++actual;
   }
 
+  // 截断拿出去的这部分链表，同时更新剩余部分作为 Span 的 free_list
   if (prev != nullptr) {
     prev->next = nullptr;
     end = prev;
   }
+  
   span->free_list = cur;
-  span->use_count += actual;
+  span->use_count += actual; // 标记从这个 Span 又借出了多少小块对象
   return span;
 }
 
@@ -271,26 +286,36 @@ void ThreadCache::ListTooLong(FreeList& list, std::size_t bytes) {
 }
 
 void* ThreadCache::Allocate(std::size_t bytes) {
+  // 根据申请字节数计算出向上对齐后的真实大小以及对应的哈希桶索引
   const std::size_t rounded = SizeClass::RoundUp(bytes);
   const std::size_t index = SizeClass::Index(rounded);
+  
+  // 优先从本线程的 ThreadCache 自由链表中获取空闲对象
   void* ptr = free_lists_[index].Pop();
   if (ptr != nullptr) {
     return ptr;
   }
+  
+  // 如果当前缓存为空，则向中央缓存去申请一批对象
   return FetchFromCentralCache(index, rounded);
 }
 
 void ThreadCache::Deallocate(void* ptr, std::size_t bytes) {
+  // 计算对象大小及对应的桶索引
   const std::size_t rounded = SizeClass::RoundUp(bytes);
   const std::size_t index = SizeClass::Index(rounded);
+  
   FreeList& list = free_lists_[index];
-  list.Push(ptr);
+  list.Push(ptr); // 归还对象到本地线程缓存
+  
+  // 如果该链表缓冲的对象过多，则回收一部分给系统 (Central Cache) 防止内存泄漏
   if (list.Size() >= list.MaxSize() * 2) {
     ListTooLong(list, rounded);
   }
 }
 
 ThreadCache& MemoryPool::LocalCache() {
+  // 只有初次访问时实例化，每个线程有自己独立的一份 ThreadCache
   thread_local ThreadCache cache;
   return cache;
 }
@@ -299,11 +324,17 @@ void* MemoryPool::Allocate(std::size_t bytes) {
   if (bytes == 0) {
     bytes = 1;
   }
+  
+  // 加上对象头大小，以便之后释放时能够找回对应的 Span
   const std::size_t actual_bytes = bytes + sizeof(ObjectHeader);
+  
+  // 如果分配的大于 ThreadCache 能处理的最大容量 (例如 > 1024 / 256K等, 根据常量定)
+  // 则直接向页缓存 (PageCache) 申请大图的大对象
   if (actual_bytes > SizeClass::kMaxBytes) {
     Span* span = PageCache::Instance().NewLargeSpan(bytes);
     return static_cast<char*>(span->memory) + sizeof(ObjectHeader);
   }
+  
   return LocalCache().Allocate(actual_bytes);
 }
 
@@ -312,11 +343,13 @@ void MemoryPool::Deallocate(void* ptr, std::size_t bytes) {
     return;
   }
 
+  // 通过对象地址减去对象头的大小，找回该对象所属的 Span
   Span* span = PageCache::MapObjectToSpan(ptr);
   if (span == nullptr) {
     return;
   }
 
+  // 如果是直接从页缓存分配的大对象，则直接归还给页缓存
   if (span->large) {
     PageCache::Instance().ReleaseSpan(span);
     return;
@@ -325,6 +358,8 @@ void MemoryPool::Deallocate(void* ptr, std::size_t bytes) {
   if (bytes == 0) {
     bytes = span->object_size - sizeof(ObjectHeader);
   }
+  
+  // 普通小对象归还到本地线程缓存中
   LocalCache().Deallocate(ptr, bytes + sizeof(ObjectHeader));
 }
 
