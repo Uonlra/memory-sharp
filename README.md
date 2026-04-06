@@ -25,7 +25,9 @@ https://memory-sharp.vercel.app/
 - `docs/vibe_interview.md`：按照 vibe coding 风格整理的模拟提问脚本。
 
 ## 如何构建
-
+```
+g++ -std=c++17 -O2 -Wall -Wextra -pthread -Iinclude -o memory_pool_demo src/main.cpp src/memory_pool.cpp
+```
 ### 方式一：直接使用 Makefile
 
 ```powershell
