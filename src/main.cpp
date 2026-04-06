@@ -43,12 +43,14 @@ std::vector<hpmem::BenchmarkCase> BuildBenchmarkCases() {
 void DemoBasicUsage() {
   std::cout << "== Basic Demo ==\n";
   std::vector<void*> objects;
+  // 按照不同的大小申请内存，演示跨越多种大小分配的需求
   for (std::size_t bytes : {16u, 24u, 64u, 128u, 512u, 1500u}) {
     void* ptr = hpmem::MemoryPool::Allocate(bytes);
     objects.push_back(ptr);
     std::cout << "allocate " << std::setw(4) << bytes << " bytes -> " << ptr << '\n';
   }
 
+  // 释放所申请和持有的所有对象回内存池中
   const std::size_t sizes[] = {16u, 24u, 64u, 128u, 512u, 1500u};
   for (std::size_t i = 0; i < objects.size(); ++i) {
     hpmem::MemoryPool::Deallocate(objects[i], sizes[i]);
