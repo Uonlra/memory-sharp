@@ -1,6 +1,8 @@
 # 高性能内存池设计项目
 
 基于 C++ 的操作系统内存池项目，核心目标是用分级缓存的方式减少频繁 `new/delete` 带来的系统调用开销和锁竞争。
+## 网页地址
+
 ## 项目示例
 https://memory-sharp.vercel.app/
 
@@ -25,6 +27,9 @@ https://memory-sharp.vercel.app/
 - `docs/vibe_interview.md`：按照 vibe coding 风格整理的模拟提问脚本。
 
 ## 如何构建
+```
+g++ -std=c++17 -O2 -Wall -Wextra -pthread -Iinclude -o memory_pool_demo src/main.cpp src/memory_pool.cpp
+```
 
 ### 方式一：直接使用 Makefile
 
